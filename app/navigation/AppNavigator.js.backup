@@ -1,0 +1,45 @@
+// app/navigation/AppNavigator.js
+import React from 'react';
+import { createStackNavigator } from '@react-navigation/stack';
+import HomeScreen from '../screen/welcomeScreen/HomeScreen'; // Adjust the import path as necessary
+import WelcomeFirstScreen from '../screen/welcomeScreen/firstScreen';
+import WelcomeSecondScreen from '../screen/welcomeScreen/SecondScreen';
+import LoginScreen from '../screen/welcomeScreen/loginScreen';
+import SignupScreen from '../screen/welcomeScreen/signupScreen';
+import ForgotPasswordScreen from '../../App';
+
+const Stack = createStackNavigator();
+
+const AppNavigator = () => {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen
+        name="Home"
+        component={HomeScreen}
+        options={{ headerShown: false }} // Add this to hide header
+      />
+      <Stack.Screen
+        name="firstScreen"
+        component={WelcomeFirstScreen}
+        options={{ headerShown: false }} // Add this to hide header
+      />
+      <Stack.Screen
+        name="SecondScreen"
+        component={WelcomeSecondScreen}
+        options={{ headerShown: false }} // Add this to hide header
+      />
+      <Stack.Screen
+        name="SignupScreen"
+        component={SignupScreen}
+        options={{ headerShown: false }} // Add this to hide header
+      />
+      <Stack.Screen
+        name="LoginScreen"
+        component={LoginScreen}
+        options={{ headerShown: false }} // Add this to hide header
+      />
+    </Stack.Navigator>
+  );
+};
+
+export default AppNavigator;
