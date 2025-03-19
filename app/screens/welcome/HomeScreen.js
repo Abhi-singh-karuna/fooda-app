@@ -7,6 +7,7 @@ import {
   Image,
   FlatList,
   TouchableOpacity,
+  Platform,
 } from 'react-native';
 import image from '../../assets/image.png'; // Adjust the path as necessary
 import { useNavigation } from '@react-navigation/native'; // Import useNavigation
@@ -22,10 +23,16 @@ const images = [
 export default function HomeScreen() {
   const navigation = useNavigation(); // Initialize navigation
 
+  // Define styles based on the platform
+  const platformStyles = {
+    backgroundColor: Platform.OS === 'ios' ? '#FE8C00' : '#FE8C00', // Example colors
+    padding: Platform.OS === 'ios' ? 20 : 10, // Example padding
+  };
+
   return (
     <ImageBackground source={image} style={styles.background}>
       <View style={styles.container}>
-        <View style={styles.textContainer}>
+        <View style={[styles.textContainer, platformStyles]}>
           <View>
             <Text style={styles.title}>
               We serve{'\n'}incomparable{'\n'}delicacies
@@ -53,20 +60,23 @@ export default function HomeScreen() {
             />
           </View>
           <View style={styles.buttonContainer}>
-            <Button
-              title="Skip"
-              onPress={() => navigation.navigate('Homes')}
-              color="#ffffff"
-            />
             <TouchableOpacity
-              style={styles.nextButtonContainer}
-              onPress={() => navigation.navigate('FirstScreen')} // Navigate to firstScreen
+              style={styles.button}
+              onPress={() => navigation.navigate('Homes')}
             >
-              <Button title="Next" color="#ffffff" />
-              <Image
-                source={require('../../assets/next-icon.png')}
-                style={styles.nextButtonImage}
-              />
+              <Text style={styles.buttonText}>Skip</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.button}
+              onPress={() => navigation.navigate('FirstScreen')}
+            >
+              <View style={styles.nextButtonContainer}>
+                <Text style={styles.buttonText}>Next </Text>
+                <Image
+                  source={require('../../assets/next-icon.png')}
+                  style={styles.nextButtonImage}
+                />
+              </View>
             </TouchableOpacity>
           </View>
         </View>
@@ -88,12 +98,10 @@ const styles = StyleSheet.create({
   },
   textContainer: {
     marginTop: '100%',
-    marginBottom: 40,
+    marginBottom: '5%',
     marginHorizontal: 10,
-    padding: 20,
     width: 360,
     height: 400,
-    backgroundColor: '#FE8C00',
     borderRadius: 55,
     alignItems: 'center',
     flex: 1,
@@ -113,14 +121,26 @@ const styles = StyleSheet.create({
   buttonContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    width: '90%',
+    width: '140%',
     marginTop: 'auto',
+    // marginHorizontal: 10,
+  },
+  button: {
+    // backgroundColor: '#FE8C00', // Set button background color
+    padding: 10,
+    borderRadius: 5,
+    alignItems: 'center',
+    flex: 1,
+    // marginHorizontal: 30, // Increase spacing between buttons
+  },
+  buttonText: {
+    color: '#ffffff', // Set text color
+    fontSize: 16,
   },
   nextButtonContainer: {
     marginRight: 10,
     flexDirection: 'row',
     alignItems: 'center',
-    // flex:1,
   },
   nextButtonImage: {
     width: 15,
@@ -143,7 +163,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     marginHorizontal: 1,
-    alignItems: 'center',
   },
   sliderImage: {
     width: 30,

@@ -13,6 +13,15 @@ import ResetPasswordScreen from '../screens/auth/ResetPasswordScreen';
 import EmailVerificationOTP from '../screens/auth/EmailVerificationOTP';
 import ForgotPasswordScreen from '../screens/auth/ForgotPasswordScreen';
 import HomeScreens from '../screens/home/HomeScreen';
+import NotificationScreen from '../screens/notification/NotificationScreen';
+import ProfileScreen from '../screens/profile/Profile';
+import PersonalDataScreen from '../screens/profile/PersonalData';
+import SettingsScreen from '../screens/profile/Settings';
+// import LanguageScreen from '../screens/profile/LanguageSelection';
+import HelpCenterScreen from '../screens/profile/HelpCenter';
+import ExtraCardScreen from '../screens/profile/ExtraCard';
+import AddCardScreen from '../screens/profile/AddCardScreen';
+
 const Stack = createStackNavigator();
 
 // Auth stack - screens for not authenticated users
@@ -27,6 +36,14 @@ const AuthNavigator = () => (
     <Stack.Screen name="EmailVerification" component={EmailVerificationOTP} />
     <Stack.Screen name="ForgotPassword" component={ForgotPasswordScreen} />
     <Stack.Screen name="Homes" component={HomeScreens} />
+    <Stack.Screen name="NotificationScreen" component={NotificationScreen} />
+    <Stack.Screen name="ProfileScreen" component={ProfileScreen} />
+    <Stack.Screen name="PersonalDataScreen" component={PersonalDataScreen} />
+    <Stack.Screen name="SettingsScreen" component={SettingsScreen} />
+    {/* <Stack.Screen name="LanguageScreen" component={LanguageScreen} /> */}
+    <Stack.Screen name="HelpCenterScreen" component={HelpCenterScreen} />
+    <Stack.Screen name="ExtraCardScreen" component={ExtraCardScreen} />
+    <Stack.Screen name="AddCardScreen" component={AddCardScreen} />
   </Stack.Navigator>
 );
 

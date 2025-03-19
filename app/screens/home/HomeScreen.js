@@ -12,12 +12,16 @@ import {
   Animated,
 } from 'react-native';
 import { Ionicons, MaterialIcons } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
 import CategoryList from '../../components/CategoryList';
 import FoodItem from '../../components/FoodItem';
 import BottomNavigation from '../../components/BottomNavigation';
+import { LinearGradient } from 'expo-linear-gradient';
 
 const HomeScreen = () => {
+  const navigation = useNavigation();
   const [loading, setLoading] = useState(false);
+  const [expandedCategories, setExpandedCategories] = useState(false);
   const [foodItems, setFoodItems] = useState([
     {
       id: '1',
@@ -139,7 +143,8 @@ const HomeScreen = () => {
       price: 17230,
     },
   ]);
-  const scrollY = useRef(new Animated.Value(0)).current; // Animated value for scroll position
+  const scrollY = useRef(new Animated.Value(0)).current;
+  const expandAnimation = useRef(new Animated.Value(0)).current;
 
   const categories = [
     { id: '1', name: 'Burger', icon: require('../../assets/icons/burger.png') },
@@ -151,9 +156,18 @@ const HomeScreen = () => {
     { id: '7', name: 'Pizza', icon: require('../../assets/icons/pizza.png') },
   ];
 
+  const toggleCategoryExpansion = () => {
+    const toValue = expandedCategories ? 0 : 1;
+    Animated.timing(expandAnimation, {
+      toValue,
+      duration: 300,
+      useNativeDriver: false,
+    }).start();
+    setExpandedCategories(!expandedCategories);
+  };
+
   const loadMoreItems = () => {
     setLoading(true);
-    // Simulate a network request
     setTimeout(() => {
       const newItems = [
         {
@@ -165,34 +179,29 @@ const HomeScreen = () => {
           image: require('../../assets/images/burger1.png'),
           isFavorite: false,
         },
-        // Add more items as needed
       ];
       setFoodItems((prevItems) => [...prevItems, ...newItems]);
       setLoading(false);
-    }, 2000); // Simulate a 2-second loading time
+    }, 2000);
   };
+
+  const categoryHeight = expandAnimation.interpolate({
+    inputRange: [0, 1],
+    outputRange: [0, 200],
+  });
 
   return (
     <SafeAreaView style={styles.container}>
-      {/* Header and Hero Banner with Background Image */}
-      <ImageBackground
-        source={require('../../assets/background-home.png')}
-        style={styles.background}
-      >
+      <LinearGradient colors={['#FFFFFF', '#000000']} style={styles.background}>
         <Animated.View
           style={[
             styles.header,
             {
-              opacity: scrollY.interpolate({
-                inputRange: [0, 100],
-                outputRange: [1, 0],
-                extrapolate: 'clamp',
-              }),
               transform: [
                 {
                   translateY: scrollY.interpolate({
                     inputRange: [0, 100],
-                    outputRange: [0, -100], // Adjust this value based on your header height
+                    outputRange: [0, 0],
                     extrapolate: 'clamp',
                   }),
                 },
@@ -217,59 +226,19 @@ const HomeScreen = () => {
             <TouchableOpacity style={styles.iconButton}>
               <Ionicons name="search" size={22} color="#FFF" />
             </TouchableOpacity>
-            <TouchableOpacity style={styles.iconButton}>
+            <TouchableOpacity
+              style={styles.iconButton}
+              onPress={() => navigation.navigate('NotificationScreen')}
+            >
               <Ionicons name="notifications-outline" size={22} color="#FFF" />
             </TouchableOpacity>
           </View>
         </Animated.View>
 
-        {/* Hero Banner */}
-        <View style={styles.heroBanner}>
-          <Text style={styles.heroTitle}>Provide the best food for you</Text>
-        </View>
-      </ImageBackground>
-
-      {/* Scrollable Content */}
-      <ScrollView
-        showsVerticalScrollIndicator={false}
-        onScroll={Animated.event(
-          [{ nativeEvent: { contentOffset: { y: scrollY } } }],
-          { useNativeDriver: false },
-        )}
-        scrollEventThrottle={16}
-      >
-        {/* Categories Section */}
-        <View style={styles.sectionHeader}>
-          <Text style={styles.sectionTitle}>Find by Category</Text>
-          <TouchableOpacity>
-            <Text style={styles.seeAllText}>See All</Text>
-          </TouchableOpacity>
-        </View>
-
-        <CategoryList categories={categories} />
-
-        {/* Food Items Grid */}
-        <View style={styles.foodGrid}>
-          {foodItems.map((item) => (
-            <FoodItem key={item.id} item={item} />
-          ))}
-        </View>
-
-        {/* Loading Indicator */}
-        {loading && (
-          <View style={styles.loadingContainer}>
-            <ActivityIndicator size="large" color="#FF8A00" />
-          </View>
-        )}
-      </ScrollView>
-
-      {/* Bottom Navigation */}
-      <Animated.View
-        style={[
-          styles.bottomNav,
-          {
+        <Animated.View
+          style={{
             opacity: scrollY.interpolate({
-              inputRange: [0, 100],
+              inputRange: [0, 80],
               outputRange: [1, 0],
               extrapolate: 'clamp',
             }),
@@ -277,7 +246,90 @@ const HomeScreen = () => {
               {
                 translateY: scrollY.interpolate({
                   inputRange: [0, 100],
-                  outputRange: [0, 100], // Adjust this value based on your bottom nav height
+                  outputRange: [0, -50],
+                  extrapolate: 'clamp',
+                }),
+              },
+              {
+                scale: scrollY.interpolate({
+                  inputRange: [0, 100],
+                  outputRange: [1, 0.8],
+                  extrapolate: 'clamp',
+                }),
+              },
+            ],
+          }}
+        >
+          <View style={styles.heroBanner}>
+            <Text style={styles.heroTitle}>Provide the best food for you</Text>
+          </View>
+        </Animated.View>
+      </LinearGradient>
+
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        onScroll={Animated.event(
+          [{ nativeEvent: { contentOffset: { y: scrollY } } }],
+          { useNativeDriver: true },
+        )}
+        scrollEventThrottle={16}
+        onScrollEndDrag={({ nativeEvent }) => {
+          if (isCloseToBottom(nativeEvent)) {
+            loadMoreItems();
+          }
+        }}
+      >
+        <View style={styles.sectionHeader}>
+          <Text style={styles.sectionTitle}>Find by Category</Text>
+          <TouchableOpacity onPress={toggleCategoryExpansion}>
+            <Text style={styles.seeAllText}>
+              {expandedCategories ? 'Show Less' : 'See All'}
+            </Text>
+          </TouchableOpacity>
+        </View>
+
+        <Animated.View
+          style={{
+            height: categoryHeight,
+            overflow: 'hidden',
+            alignSelf: 'flex-start',
+          }}
+        >
+          <CategoryList
+            categories={
+              expandedCategories ? categories : categories.slice(0, 4)
+            }
+            expanded={expandedCategories}
+          />
+        </Animated.View>
+
+        <View style={styles.foodGrid}>
+          {foodItems.map((item) => (
+            <FoodItem key={item.id} item={item} />
+          ))}
+        </View>
+
+        {loading && (
+          <View style={styles.loadingContainer}>
+            <ActivityIndicator size="large" color="#FF8A00" />
+          </View>
+        )}
+      </ScrollView>
+
+      <Animated.View
+        style={[
+          styles.bottomNav,
+          {
+            opacity: scrollY.interpolate({
+              inputRange: [0, 200],
+              outputRange: [1, 0],
+              extrapolate: 'clamp',
+            }),
+            transform: [
+              {
+                translateY: scrollY.interpolate({
+                  inputRange: [0, 200],
+                  outputRange: [0, 100],
                   extrapolate: 'clamp',
                 }),
               },
@@ -291,9 +343,8 @@ const HomeScreen = () => {
   );
 };
 
-// Function to check if the user is close to the bottom of the scroll view
 const isCloseToBottom = ({ layoutMeasurement, contentOffset, contentSize }) => {
-  const paddingToBottom = 20; // Adjust as needed
+  const paddingToBottom = 20;
   return (
     layoutMeasurement.height + contentOffset.y >=
     contentSize.height - paddingToBottom
@@ -302,11 +353,11 @@ const isCloseToBottom = ({ layoutMeasurement, contentOffset, contentSize }) => {
 
 const styles = StyleSheet.create({
   background: {
-    paddingBottom: 90, // Adjust as needed for spacing
-    resizeMode: 'stretch', // or 'stretch'
+    resizeMode: 'stretch',
   },
   container: {
     flex: 1,
+    // marginTop: '10%',
   },
   loadingContainer: {
     paddingVertical: 20,
@@ -391,6 +442,9 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     bottom: 0,
+  },
+  expandedCategoryContainer: {
+    paddingBottom: 10,
   },
 });
 

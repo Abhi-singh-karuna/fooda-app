@@ -10,6 +10,10 @@ const BottomNavigation = () => {
     navigation.navigate('Homes');
   };
 
+  const navigateToProfile = () => {
+    navigation.navigate('ProfileScreen');
+  };
+
   return (
     <View style={styles.bottomNav}>
       <TouchableOpacity style={styles.navItem} onPress={navigateToHomes}>
@@ -27,7 +31,7 @@ const BottomNavigation = () => {
         <Text style={styles.navText}>Chat</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.navItem}>
+      <TouchableOpacity style={styles.navItem} onPress={navigateToProfile}>
         <Ionicons name="person-outline" size={24} color="#ABABAB" />
         <Text style={styles.navText}>Profile</Text>
       </TouchableOpacity>
