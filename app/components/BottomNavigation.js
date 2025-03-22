@@ -14,52 +14,141 @@ const BottomNavigation = () => {
     navigation.navigate('ProfileScreen');
   };
 
+  const isRouteActive = (routeName) => {
+    const currentRoute =
+      navigation.getState().routes[navigation.getState().index].name;
+    return currentRoute === routeName;
+  };
+
   return (
-    <View style={styles.bottomNav}>
-      <TouchableOpacity style={styles.navItem} onPress={navigateToHomes}>
-        <Ionicons name="home" size={24} color="#FF8A00" />
-        <Text style={[styles.navText, styles.activeNavText]}>Home</Text>
+    <View style={styles.container}>
+      <TouchableOpacity
+        style={styles.tabItem}
+        onPress={() => navigation.navigate('HomeScreens')}
+      >
+        <Ionicons
+          name={isRouteActive('HomeScreen') ? 'home' : 'home-outline'}
+          size={24}
+          color={isRouteActive('HomeScreen') ? '#FF8A00' : '#888'}
+        />
+        <Text
+          style={[
+            styles.tabText,
+            isRouteActive('HomeScreen') && styles.activeTabText,
+          ]}
+        >
+          Home
+        </Text>
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.navItem}>
-        <Ionicons name="lock-closed-outline" size={24} color="#ABABAB" />
-        <Text style={styles.navText}>Secure</Text>
+      <TouchableOpacity
+        style={styles.tabItem}
+        onPress={() => navigation.navigate('SearchV1Screen')}
+      >
+        <Ionicons
+          name={isRouteActive('SearchV1Screen') ? 'search' : 'search-outline'}
+          size={24}
+          color={isRouteActive('SearchV1Screen') ? '#FF8A00' : '#888'}
+        />
+        <Text
+          style={[
+            styles.tabText,
+            isRouteActive('SearchV1Screen') && styles.activeTabText,
+          ]}
+        >
+          Search
+        </Text>
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.navItem}>
-        <Ionicons name="chatbubble-outline" size={24} color="#ABABAB" />
-        <Text style={styles.navText}>Chat</Text>
+      <TouchableOpacity
+        style={styles.tabItem}
+        onPress={() => navigation.navigate('OrderScreen')}
+      >
+        <Ionicons
+          name={isRouteActive('OrderScreen') ? 'cart' : 'cart-outline'}
+          size={24}
+          color={isRouteActive('OrderScreen') ? '#FF8A00' : '#888'}
+        />
+        <Text
+          style={[
+            styles.tabText,
+            isRouteActive('OrderScreen') && styles.activeTabText,
+          ]}
+        >
+          Orders
+        </Text>
+      </TouchableOpacity>
+      
+      <TouchableOpacity
+        style={styles.tabItem}
+        onPress={() => navigation.navigate('ChatListScreen')}
+      >
+        <Ionicons
+          name={
+            isRouteActive('ChatListScreen')
+              ? 'chatbubble'
+              : 'chatbubble-outline'
+          }
+          size={24}
+          color={isRouteActive('ChatListScreen') ? '#FF8A00' : '#888'}
+        />
+        <Text
+          style={[
+            styles.tabText,
+            isRouteActive('ChatListScreen') && styles.activeTabText,
+          ]}
+        >
+          Chat
+        </Text>
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.navItem} onPress={navigateToProfile}>
-        <Ionicons name="person-outline" size={24} color="#ABABAB" />
-        <Text style={styles.navText}>Profile</Text>
+      <TouchableOpacity
+        style={styles.tabItem}
+        onPress={() => navigation.navigate('ProfileScreen')}
+      >
+        <Ionicons
+          name={isRouteActive('ProfileScreen') ? 'person' : 'person-outline'}
+          size={24}
+          color={isRouteActive('ProfileScreen') ? '#FF8A00' : '#888'}
+        />
+        <Text
+          style={[
+            styles.tabText,
+            isRouteActive('ProfileScreen') && styles.activeTabText,
+          ]}
+        >
+          Profile
+        </Text>
       </TouchableOpacity>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  bottomNav: {
+  container: {
     flexDirection: 'row',
-    justifyContent: 'space-around',
-    alignItems: 'center',
+    height: 60,
+    backgroundColor: '#FFF',
     borderTopWidth: 1,
-    borderTopColor: '#EEEEEE',
-    backgroundColor: '#FFFFFF',
-    paddingVertical: 10,
+    borderTopColor: '#EEE',
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
   },
-  navItem: {
-    alignItems: 'center',
+  tabItem: {
+    flex: 1,
     justifyContent: 'center',
+    alignItems: 'center',
   },
-  navText: {
+  tabText: {
     fontSize: 12,
-    color: '#ABABAB',
+    color: '#888',
     marginTop: 4,
   },
-  activeNavText: {
+  activeTabText: {
     color: '#FF8A00',
+    fontWeight: 'bold',
   },
 });
 

@@ -5,14 +5,14 @@ import {
   Button,
   ImageBackground,
   Image,
-  FlatList,
+  ScrollView,
   TouchableOpacity,
   Platform,
 } from 'react-native';
+import React from 'react';
 import image from '../../assets/image.png'; // Adjust the path as necessary
 import { useNavigation } from '@react-navigation/native'; // Import useNavigation
-import { NavigationContainer } from '@react-navigation/native';
-import AppNavigator from '../../navigation/AppNavigator';
+
 
 const images = [
   require('../../assets/Rectangle-white.png'),
@@ -20,7 +20,7 @@ const images = [
   require('../../assets/Rectangle-gray.png'),
 ];
 
-export default function HomeScreen() {
+const HomeScreen = () => {
   const navigation = useNavigation(); // Initialize navigation
 
   // Define styles based on the platform
@@ -45,24 +45,20 @@ export default function HomeScreen() {
             </Text>
           </View>
           <View style={styles.sliderContainer}>
-            <View style={styles.sliderContainerInner}></View>
-            <FlatList
-              data={images}
-              horizontal
-              contentContainerStyle={{ justifyContent: 'center' }}
-              renderItem={({ item }) => (
-                <View style={styles.sliderItem}>
-                  <Image source={item} style={styles.sliderImage} />
-                </View>
-              )}
-              keyExtractor={(item, index) => index.toString()}
-              alwaysBounceHorizontal={false}
-            />
+            <View style={styles.sliderContainerInner}>
+              <View style={styles.sliderItems}>
+                <View
+                  style={[styles.sliderIndicator, styles.activeIndicator]}
+                />
+                <View style={styles.sliderIndicator} />
+                <View style={styles.sliderIndicator} />
+              </View>
+            </View>
           </View>
           <View style={styles.buttonContainer}>
             <TouchableOpacity
               style={styles.button}
-              onPress={() => navigation.navigate('Homes')}
+              onPress={() => navigation.navigate('HomeScreens')}
             >
               <Text style={styles.buttonText}>Skip</Text>
             </TouchableOpacity>
@@ -83,7 +79,9 @@ export default function HomeScreen() {
       </View>
     </ImageBackground>
   );
-}
+};
+
+export default HomeScreen;
 
 const styles = StyleSheet.create({
   background: {
@@ -152,22 +150,28 @@ const styles = StyleSheet.create({
   },
   sliderContainer: {
     flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   sliderContainerInner: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
-    marginTop: 10,
+    justifyContent: 'center',
+    marginTop: 20,
   },
-  sliderItem: {
+  sliderItems: {
+    flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
-    marginHorizontal: 1,
+    justifyContent: 'center',
   },
-  sliderImage: {
+  sliderIndicator: {
     width: 30,
     height: 6,
     borderRadius: 5,
+    backgroundColor: '#cccccc',
     marginHorizontal: 2,
+  },
+  activeIndicator: {
+    backgroundColor: '#ffffff',
   },
 });

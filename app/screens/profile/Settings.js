@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import {
   View,
   Text,
@@ -22,37 +22,80 @@ const SettingsScreen = () => {
 
   const languages = [
     { id: 'id', name: 'Indonesia', flag: '🇮🇩' },
-    { id: 'en', name: 'English (US)', flag: '🇺🇸', selected: true },
+    { id: 'en', name: 'English (US)', flag: '🇺🇸' },
     { id: 'th', name: 'Thailand', flag: '🇹🇭' },
     { id: 'zh', name: 'Chinese', flag: '🇨🇳' },
   ];
 
-  const selectLanguage = (id) => {
+  const selectLanguage = useCallback((id) => {
     setSelectedLanguage(id);
+  }, []);
+
+  const log = (message) => {
+    console.log(`[SettingsScreen] ${message}`);
   };
 
-  const handleConfirm = () => {
+  // Log the languages array when the component mounts
+  React.useEffect(() => {
+    log(`Available languages: ${JSON.stringify(languages)}`);
+  }, []);
+
+  const handleConfirm = useCallback(() => {
+    log(`Language selected: ${selectedLanguage}`);
     setLanguageModalVisible(false);
-  };
+  }, [selectedLanguage]);
 
-  const renderLanguageItem = ({ item }) => {
-    const isSelected = selectedLanguage === item.id;
+  // Log when the FlatList is rendered
+  const renderLanguageItem = useCallback(
+    ({ item }) => {
+      log(`Rendering language item: ${JSON.stringify(item)}`);
+      if (!item) {
+        log('Item is undefined or null');
+        return null;
+      }
 
-    return (
-      <TouchableOpacity
-        style={[styles.languageItem, isSelected && styles.selectedLanguageItem]}
-        onPress={() => selectLanguage(item.id)}
-      >
-        <View style={styles.flagContainer}>
-          <Text style={styles.flagEmoji}>{item.flag}</Text>
-        </View>
-        <Text style={styles.languageName}>{item.name}</Text>
-        {isSelected && (
-          <Ionicons name="checkmark-circle" size={24} color={colors.primary} />
-        )}
-      </TouchableOpacity>
-    );
-  };
+      const isSelected = selectedLanguage === item.id;
+
+      return (
+        <TouchableOpacity
+          style={[
+            styles.languageItem,
+            isSelected && styles.selectedLanguageItem,
+          ]}
+          onPress={() => selectLanguage(item.id)}
+        >
+          <View style={styles.flagContainer}>
+            <Text style={styles.flagEmoji}>{item.flag}</Text>
+          </View>
+          <Text style={styles.languageName}>{item.name}</Text>
+          {isSelected && (
+            <Ionicons
+              name="checkmark-circle"
+              size={24}
+              color={colors.primary}
+            />
+          )}
+        </TouchableOpacity>
+      );
+    },
+    [selectedLanguage, selectLanguage],
+  );
+
+  // Log the keyExtractor output
+  const keyExtractor = useCallback((item) => {
+    const key = item?.id?.toString() || Math.random().toString();
+    log(`Key extracted: ${key}`);
+    return key;
+  }, []);
+
+  const renderEmptyList = useCallback(
+    () => (
+      <View style={styles.emptyList}>
+        <Text>No languages available</Text>
+      </View>
+    ),
+    [],
+  );
 
   const navigateToAboutScreen = () => {
     // Future implementation
@@ -114,7 +157,10 @@ const SettingsScreen = () => {
         >
           <Text style={styles.settingLabel}>Language</Text>
           <View style={styles.valueContainer}>
-            <Text style={styles.settingValue}>{selectedLanguage}</Text>
+            <Text style={styles.settingValue}>
+              {languages.find((lang) => lang.id === selectedLanguage)?.name ||
+                'English (US)'}
+            </Text>
             <Ionicons name="chevron-forward" size={20} color="#666" />
           </View>
         </TouchableOpacity>
@@ -151,17 +197,32 @@ const SettingsScreen = () => {
         visible={languageModalVisible}
         transparent={true}
         animationType="slide"
+        onRequestClose={() => setLanguageModalVisible(false)}
       >
         <View style={styles.modalOverlay}>
           <View style={styles.modalContainer}>
-            <Text style={styles.selectionTitle}>Select Language</Text>
+            <View style={styles.modalHeader}>
+              <Text style={styles.selectionTitle}>Select Language</Text>
+              <TouchableOpacity
+                style={styles.closeButton}
+                onPress={() => setLanguageModalVisible(false)}
+              >
+                <Ionicons name="close" size={24} color="#000" />
+              </TouchableOpacity>
+            </View>
+
             <FlatList
               data={languages}
-              keyExtractor={(item) => item.id}
               renderItem={renderLanguageItem}
+              keyExtractor={keyExtractor}
+              ListEmptyComponent={renderEmptyList}
               style={styles.languageList}
               contentContainerStyle={styles.languageListContent}
+              initialNumToRender={4}
+              maxToRenderPerBatch={4}
+              windowSize={5}
             />
+
             <TouchableOpacity
               style={styles.selectButton}
               onPress={handleConfirm}
@@ -292,6 +353,21 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   languageListContent: {
+    padding: 20,
+  },
+  modalHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 20,
+  },
+  closeButton: {
+    padding: 5,
+  },
+  emptyList: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
     padding: 20,
   },
 });

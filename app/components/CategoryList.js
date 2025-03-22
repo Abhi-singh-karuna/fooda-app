@@ -9,73 +9,59 @@ import {
 } from 'react-native';
 
 const CategoryList = ({ categories, expanded = false }) => {
+  const containerStyle = expanded ? styles.expandedContainer : styles.container;
+
   return (
-    <View style={styles.container}>
-      {expanded ? (
-        <View style={styles.gridContainer}>
-          {categories.map((category) => (
-            <TouchableOpacity
-              key={category.id}
-              style={styles.gridItem}
-              activeOpacity={0.7}
-            >
-              <View style={styles.categoryCircle}>
-                <Image source={category.icon} style={styles.categoryIcon} />
-              </View>
-              <Text style={styles.categoryName}>{category.name}</Text>
-            </TouchableOpacity>
-          ))}
-        </View>
-      ) : (
-        <ScrollView
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          contentContainerStyle={styles.scrollContainer}
-        >
-          {categories.map((category) => (
-            <TouchableOpacity
-              key={category.id}
-              style={styles.categoryItem}
-              activeOpacity={0.7}
-            >
-              <View style={styles.categoryCircle}>
-                <Image source={category.icon} style={styles.categoryIcon} />
-              </View>
-              <Text style={styles.categoryName}>{category.name}</Text>
-            </TouchableOpacity>
-          ))}
-        </ScrollView>
-      )}
+    <View style={containerStyle}>
+      <ScrollView
+        horizontal={!expanded}
+        showsHorizontalScrollIndicator={false}
+        contentContainerStyle={
+          expanded ? styles.gridContainer : styles.rowContainer
+        }
+      >
+        {categories.map((category) => (
+          <TouchableOpacity key={category.id} style={styles.categoryItem}>
+            <View style={styles.categoryIconContainer}>
+              <Image source={category.icon} style={styles.categoryIcon} />
+            </View>
+            <Text style={styles.categoryName}>{category.name}</Text>
+          </TouchableOpacity>
+        ))}
+      </ScrollView>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    marginBottom: 20,
-  },
-  scrollContainer: {
+    paddingVertical: 10,
     paddingHorizontal: 16,
   },
-  categoryItem: {
-    alignItems: 'center',
-    marginRight: 20,
+  expandedContainer: {
+    paddingVertical: 10,
+    paddingHorizontal: 16,
+    height: 200,
+  },
+  rowContainer: {
+    flexDirection: 'row',
   },
   gridContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    paddingHorizontal: 16,
+    justifyContent: 'space-between',
   },
-  gridItem: {
-    width: '25%',
+  categoryItem: {
     alignItems: 'center',
+    marginRight: 20,
     marginBottom: 20,
+    width: 'auto',
   },
-  categoryCircle: {
+  categoryIconContainer: {
     width: 60,
     height: 60,
     borderRadius: 30,
-    backgroundColor: '#F5F5F5',
+    backgroundColor: '#FFF5EB',
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 8,
@@ -86,7 +72,7 @@ const styles = StyleSheet.create({
   },
   categoryName: {
     fontSize: 14,
-    textAlign: 'center',
+    color: '#333',
   },
 });
 

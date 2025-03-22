@@ -61,7 +61,7 @@ export default function ValidateOTPScreen() {
     }
 
     // Proceed to the next step if validation passes
-    navigation.navigate('Login'); // Replace with your next screen
+    navigation.navigate('LoginScreen'); // Replace with your next screen
   };
 
   return (

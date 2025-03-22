@@ -39,7 +39,7 @@ export default function ForgotPasswordScreen() {
     }
     // Close the panel and navigate to Login page
     setPanelVisible(false);
-    navigation.navigate('EmailVerification', { email });
+    navigation.navigate('EmailVerificationOTP', { email });
   };
 
   return (

@@ -6,10 +6,14 @@ import {
   TextInput,
   TouchableOpacity,
   Image,
+  ScrollView,
+  TouchableWithoutFeedback,
 } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { isValidEmail, isValidPassword } from '../../utils/validation';
+import RNPickerSelect from 'react-native-picker-select';
+import CountryCodePicker from '../../components/CountryCodePicker';
 
 export default function SignupScreen() {
   const navigation = useNavigation();
@@ -21,6 +25,9 @@ export default function SignupScreen() {
   const [emailError, setEmailError] = useState(false);
   const [passwordError, setPasswordError] = useState(false);
   const [isAgreed, setIsAgreed] = useState(false);
+  const [countryCode, setCountryCode] = useState('+91');
+  const [phoneNumber, setPhoneNumber] = useState('');
+  const [modalVisible, setModalVisible] = useState(false);
 
   const handleEmailChange = (text) => {
     setEmail(text);
@@ -45,100 +52,140 @@ export default function SignupScreen() {
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Create your new{'\n'}account.</Text>
-      <Text style={styles.subtitle}>
-        Create an account to start looking for the food you like
-      </Text>
-      <Text style={styles.label}>Email Address</Text>
-      <TextInput
-        style={[styles.input, emailError && styles.inputError]}
-        placeholder="Enter your email"
-        value={email}
-        onChangeText={handleEmailChange}
-        onBlur={handleEmailBlur}
-        keyboardType="email-address"
-      />
-      <Text style={styles.label}>User Name</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="Enter your username"
-        value={username}
-        onChangeText={handleUsernameChange}
-      />
-      <Text style={styles.label}>Password</Text>
-      <View style={styles.passwordContainer}>
-        <TextInput
-          style={[styles.inputPassword, passwordError && styles.inputError]}
-          placeholder="Enter your password"
-          secureTextEntry={secureText}
-          value={password}
-          onChangeText={handlePasswordChange}
-          onBlur={handlePasswordBlur}
-        />
-        <TouchableOpacity onPress={() => setSecureText(!secureText)}>
-          <FontAwesome
-            name={secureText ? 'eye-slash' : 'eye'}
-            size={20}
-            color="gray"
-          />
-        </TouchableOpacity>
-      </View>
-      <View style={styles.termsContainer}>
-        <TouchableOpacity
-          style={[styles.checkbox, isAgreed && styles.checkboxSelected]}
-          onPress={() => setIsAgreed(!isAgreed)}
-        >
-          {isAgreed && <FontAwesome name="check" size={16} color="white" />}
-        </TouchableOpacity>
-        <Text style={styles.termsText}>
-          I Agree with <Text style={styles.linkText}>Terms of Service</Text> and{' '}
-          <Text style={styles.linkText}>Privacy Policy</Text>
+    <ScrollView contentContainerStyle={styles.scrollContainer}>
+      <View style={styles.container}>
+        <Text style={styles.title}>Create your new{'\n'}account.</Text>
+        <Text style={styles.subtitle}>
+          Create an account to start looking for the food you like
         </Text>
-      </View>
-      <TouchableOpacity
-        style={[styles.signUpButton, !isAgreed && styles.buttonDisabled]}
-        disabled={!isAgreed}
-        onPress={() => navigation.navigate('Login')}
-      >
-        <Text style={styles.signInText}>Register</Text>
-      </TouchableOpacity>
-      <View style={styles.lineContainer}>
-        <View style={styles.line} />
-        <Text style={styles.orText}>Or sign in with</Text>
-        <View style={styles.line} />
-      </View>
-      <View style={styles.socialIcons}>
-        <TouchableOpacity>
-          <Image
-            source={require('../../../assets/google.png')}
-            style={styles.icon}
+        <Text style={styles.label}>Name</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="Enter your name"
+          value={username}
+          onChangeText={handleUsernameChange}
+        />
+        {/* Phone Number */}
+        <Text style={styles.label}>Phone Number</Text>
+        <View style={styles.phoneContainer}>
+          <View style={styles.countryCodeContainer}>
+            <TouchableOpacity
+              onPress={() => setModalVisible(true)}
+              style={styles.countryCodeTouchable}
+            >
+              <TextInput
+                style={styles.countryCodeInput}
+                value={countryCode}
+                editable={false}
+              />
+            </TouchableOpacity>
+          </View>
+          <View style={styles.phoneInputContainer}>
+            <TextInput
+              style={styles.phoneInput}
+              placeholder="Enter your phone number"
+              value={phoneNumber}
+              onChangeText={setPhoneNumber}
+            />
+          </View>
+        </View>
+        <Text style={styles.label}>Email Address</Text>
+        <TextInput
+          style={[styles.input, emailError && styles.inputError]}
+          placeholder="Enter your email"
+          value={email}
+          onChangeText={handleEmailChange}
+          onBlur={handleEmailBlur}
+          keyboardType="email-address"
+        />
+
+        <Text style={styles.label}>Password</Text>
+        <View style={styles.passwordContainer}>
+          <TextInput
+            style={[styles.inputPassword, passwordError && styles.inputError]}
+            placeholder="Enter your password"
+            secureTextEntry={secureText}
+            value={password}
+            onChangeText={handlePasswordChange}
+            onBlur={handlePasswordBlur}
           />
+          <TouchableOpacity onPress={() => setSecureText(!secureText)}>
+            <FontAwesome
+              name={secureText ? 'eye-slash' : 'eye'}
+              size={20}
+              color="gray"
+            />
+          </TouchableOpacity>
+        </View>
+        <View style={styles.termsContainer}>
+          <TouchableOpacity
+            style={[styles.checkbox, isAgreed && styles.checkboxSelected]}
+            onPress={() => setIsAgreed(!isAgreed)}
+          >
+            {isAgreed && <FontAwesome name="check" size={16} color="white" />}
+          </TouchableOpacity>
+          <Text style={styles.termsText}>
+            I Agree with <Text style={styles.linkText}>Terms of Service</Text>{' '}
+            and <Text style={styles.linkText}>Privacy Policy</Text>
+          </Text>
+        </View>
+        <TouchableOpacity
+          style={[styles.signUpButton, !isAgreed && styles.buttonDisabled]}
+          disabled={!isAgreed}
+          onPress={() => navigation.navigate('LoginScreen')}
+        >
+          <Text style={styles.signInText}>Register</Text>
         </TouchableOpacity>
-        <TouchableOpacity>
-          <Image
-            source={require('../../../assets/facebook.png')}
-            style={styles.icon}
-          />
-        </TouchableOpacity>
-        <TouchableOpacity>
-          <Image
-            source={require('../../../assets/apple.png')}
-            style={styles.icon}
-          />
-        </TouchableOpacity>
+        <View style={styles.lineContainer}>
+          <View style={styles.line} />
+          <Text style={styles.orText}>Or sign in with</Text>
+          <View style={styles.line} />
+        </View>
+        <View style={styles.socialIcons}>
+          <TouchableOpacity>
+            <Image
+              source={require('../../../assets/google.png')}
+              style={styles.icon}
+            />
+          </TouchableOpacity>
+          <TouchableOpacity>
+            <Image
+              source={require('../../../assets/facebook.png')}
+              style={styles.icon}
+            />
+          </TouchableOpacity>
+          <TouchableOpacity>
+            <Image
+              source={require('../../../assets/apple.png')}
+              style={styles.icon}
+            />
+          </TouchableOpacity>
+        </View>
+        <Text style={styles.registerText}>
+          Already have an account?{' '}
+          <TouchableOpacity onPress={() => navigation.navigate('LoginScreen')}>
+            <Text style={styles.registerLink}>Sign In</Text>
+          </TouchableOpacity>{' '}
+        </Text>
+        {/* Country Code Picker Modal */}
+        <CountryCodePicker
+          visible={modalVisible}
+          onClose={() => setModalVisible(false)}
+          onSelect={(code) => {
+            setCountryCode(code);
+            setModalVisible(false);
+          }}
+        />
       </View>
-      <Text style={styles.registerText}>
-        Already have an account?{' '}
-        <TouchableOpacity onPress={() => navigation.navigate('Login')}>
-          <Text style={styles.registerLink}>Sign In</Text>
-        </TouchableOpacity>{' '}
-      </Text>
-    </View>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
+  scrollContainer: {
+    flexGrow: 1,
+    backgroundColor: 'white',
+  },
   container: {
     flex: 1,
     padding: 20,
@@ -163,8 +210,9 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: 'gray',
     borderRadius: 8,
-    padding: 17,
+    padding: 12,
     marginTop: 5,
+    backgroundColor: '#f9f9f9',
   },
   passwordContainer: {
     flexDirection: 'row',
@@ -177,7 +225,7 @@ const styles = StyleSheet.create({
   },
   inputPassword: {
     flex: 1,
-    paddingVertical: 17,
+    paddingVertical: 12,
     borderRadius: 8,
   },
   termsContainer: {
@@ -258,5 +306,38 @@ const styles = StyleSheet.create({
   linkText: {
     color: '#FE8C00',
     fontWeight: 'bold',
+  },
+  phoneContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 10,
+  },
+  countryCodeContainer: {
+    flex: 1,
+    marginRight: 10,
+    borderWidth: 1,
+    borderColor: 'gray',
+    borderRadius: 8,
+    backgroundColor: '#f9f9f9',
+  },
+  countryCodeTouchable: {
+    justifyContent: 'center',
+  },
+  countryCodeInput: {
+    padding: 12,
+    fontSize: 16,
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+  phoneInputContainer: {
+    flex: 5,
+    borderWidth: 1,
+    borderColor: 'gray',
+    borderRadius: 8,
+    backgroundColor: '#f9f9f9',
+  },
+  phoneInput: {
+    padding: 12,
+    fontSize: 16,
   },
 });

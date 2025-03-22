@@ -32,7 +32,7 @@ export default function LoginScreen() {
   };
 
   const navigateToHomes = () => {
-    navigation.navigate('Homes');
+    navigation.navigate('HomeScreens');
   };
 
   return (
@@ -68,14 +68,14 @@ export default function LoginScreen() {
         </TouchableOpacity>
       </View>
 
-      <TouchableOpacity onPress={() => navigation.navigate('ForgotPassword')}>
+      <TouchableOpacity
+        onPress={() => navigation.navigate('ForgotPasswordScreen')}
+      >
         <Text style={styles.forgotPassword}>Forgot password?</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.signInButton}>
-        <Text onPress={navigateToHomes} style={styles.signInText}>
-          Sign In
-        </Text>
+      <TouchableOpacity style={styles.signInButton} onPress={navigateToHomes}>
+        <Text style={styles.signInText}>Sign In</Text>
       </TouchableOpacity>
 
       <View style={styles.lineContainer}>

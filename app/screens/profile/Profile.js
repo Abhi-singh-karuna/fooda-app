@@ -12,6 +12,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { colors } from '../../styles/colors';
 import SignOutModal from '../../components/SignOutModal';
+import BottomNavigation from '../../components/BottomNavigation';
 
 const ProfileScreen = () => {
   const navigation = useNavigation();
@@ -186,27 +187,7 @@ const ProfileScreen = () => {
       </ScrollView>
 
       {/* Bottom Navigation */}
-      <View style={styles.bottomNav}>
-        <TouchableOpacity style={styles.navItem} onPress={navigateToHome}>
-          <Ionicons name="home-outline" size={24} color="#ABABAB" />
-          <Text style={styles.navText}>Home</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity style={styles.navItem}>
-          <Ionicons name="lock-closed-outline" size={24} color="#ABABAB" />
-          <Text style={styles.navText}>Secure</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity style={styles.navItem}>
-          <Ionicons name="chatbubble-outline" size={24} color="#ABABAB" />
-          <Text style={styles.navText}>Chat</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity style={styles.navItem}>
-          <Ionicons name="person" size={24} color={colors.primary} />
-          <Text style={[styles.navText, styles.activeNavText]}>Profile</Text>
-        </TouchableOpacity>
-      </View>
+      <BottomNavigation />
 
       {/* Sign Out Modal */}
       <SignOutModal

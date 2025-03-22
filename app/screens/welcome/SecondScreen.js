@@ -2,24 +2,16 @@ import {
   StyleSheet,
   View,
   Text,
-  Button,
   ImageBackground,
   Image,
-  FlatList,
   TouchableOpacity,
 } from 'react-native';
-import image from '../../assets/bg-Second-Screen.jpg'; // Adjust the path as necessary
-import { useNavigation } from '@react-navigation/native'; // Import useNavigation
-
-// Assuming you have an array of image sources
-const images = [
-  require('../../assets/Rectangle-gray.png'),
-  require('../../assets/Rectangle-gray.png'),
-  require('../../assets/Rectangle-white.png'),
-];
+import React from 'react';
+import image from '../../assets/bg-Second-Screen.jpg';
+import { useNavigation } from '@react-navigation/native';
 
 export default function WelcomeSecondScreen() {
-  const navigation = useNavigation(); // Initialize navigation
+  const navigation = useNavigation();
 
   return (
     <ImageBackground source={image} style={styles.background}>
@@ -36,24 +28,21 @@ export default function WelcomeSecondScreen() {
               can't wait for your order!!
             </Text>
           </View>
+
+          {/* Static slider indicators */}
           <View style={styles.sliderContainer}>
-            <View style={styles.sliderContainerInner}></View>
-            <FlatList
-              data={images}
-              horizontal
-              contentContainerStyle={{ justifyContent: 'center' }}
-              renderItem={({ item }) => (
-                <View style={styles.sliderItem}>
-                  <Image source={item} style={styles.sliderImage} />
-                </View>
-              )}
-              keyExtractor={(item, index) => index.toString()}
-              alwaysBounceHorizontal={false}
-            />
+            <View style={styles.sliderContainerInner}>
+              <View style={styles.indicatorContainer}>
+                <View style={[styles.indicator, styles.grayIndicator]} />
+                <View style={[styles.indicator, styles.grayIndicator]} />
+                <View style={[styles.indicator, styles.whiteIndicator]} />
+              </View>
+            </View>
           </View>
+
           <View style={styles.nextButtonContainer}>
             <TouchableOpacity
-              onPress={() => navigation.navigate('SignupScreen')} // Navigate to firstScreen
+              onPress={() => navigation.navigate('SignupScreen')}
             >
               <Image
                 source={require('../../assets/Progress-button.png')}
@@ -91,7 +80,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flex: 1,
   },
-
   title: {
     fontSize: 36,
     fontWeight: 'bold',
@@ -104,42 +92,40 @@ const styles = StyleSheet.create({
     color: '#ffffff',
     textAlign: 'center',
   },
-  buttonContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    width: '90%',
-    marginTop: 'auto',
-  },
   nextButtonContainer: {
     flex: 3,
+    alignItems: 'center',
   },
   nextButtonImage: {
-    width: 150,
-    height: 150,
+    width: 70,
+    height: 100,
     marginLeft: 1,
-  },
-  nextButton: {
-    paddingRight: 20,
   },
   sliderContainer: {
     flex: 1,
+    justifyContent: 'center',
   },
   sliderContainerInner: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
-    marginTop: 10,
+    justifyContent: 'center',
+    marginTop: 20,
   },
-  sliderItem: {
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    marginHorizontal: 1,
+  indicatorContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
     alignItems: 'center',
   },
-  sliderImage: {
+  indicator: {
     width: 30,
     height: 6,
     borderRadius: 5,
     marginHorizontal: 2,
+  },
+  whiteIndicator: {
+    backgroundColor: '#FFFFFF',
+  },
+  grayIndicator: {
+    backgroundColor: '#CCCCCC',
   },
 });

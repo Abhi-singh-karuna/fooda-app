@@ -5,16 +5,11 @@ import {
   Button,
   ImageBackground,
   Image,
-  FlatList,
+  TouchableOpacity,
 } from 'react-native';
+import React from 'react';
 import image from '../../assets/image.png';
 import { useNavigation } from '@react-navigation/native'; // Import useNavigation
-
-const images = [
-  require('../../assets/Rectangle-gray.png'),
-  require('../../assets/Rectangle-white.png'),
-  require('../../assets/Rectangle-gray.png'),
-];
 
 export default function FirstScreen() {
   const navigation = useNavigation(); // Initialize navigation
@@ -34,33 +29,33 @@ export default function FirstScreen() {
               can't wait for your order!!
             </Text>
           </View>
+
+          {/* Static slider indicators instead of FlatList */}
           <View style={styles.sliderContainer}>
-            <View style={styles.sliderContainerInner}></View>
-            <FlatList
-              data={images}
-              horizontal
-              contentContainerStyle={{ justifyContent: 'center' }}
-              renderItem={({ item }) => (
-                <View style={styles.sliderItem}>
-                  <Image source={item} style={styles.sliderImage} />
-                </View>
-              )}
-              keyExtractor={(item, index) => index.toString()}
-              alwaysBounceHorizontal={false}
-            />
+            <View style={styles.sliderContainerInner}>
+              <View style={styles.indicatorContainer}>
+                <View style={[styles.indicator, styles.grayIndicator]} />
+                <View style={[styles.indicator, styles.whiteIndicator]} />
+                <View style={[styles.indicator, styles.grayIndicator]} />
+              </View>
+            </View>
           </View>
+
           <View style={styles.buttonContainer}>
-            <Button title="Skip" onPress={() => {}} color="#ffffff" />
+            <TouchableOpacity
+              onPress={() => navigation.navigate('HomeScreens')}
+            >
+              <Text style={styles.buttonText}>Skip</Text>
+            </TouchableOpacity>
+
             <View style={styles.nextButtonContainer}>
-              <Button
-                title="Next"
-                // onPress={() => {}}
-                onPress={() => navigation.navigate('SecondScreen')} // Navigate to firstScreen
-                color="#ffffff"
-              />
+              <TouchableOpacity
+                onPress={() => navigation.navigate('SecondScreen')}
+              >
+                <Text style={styles.buttonText}>Next</Text>
+              </TouchableOpacity>
               <Image
                 source={require('../../assets/next-icon.png')}
-                onPress={() => navigation.navigate('SecondScreen')} // Navigate to firstScreen
                 style={styles.nextButtonImage}
               />
             </View>
@@ -112,39 +107,45 @@ const styles = StyleSheet.create({
     width: '90%',
     marginTop: 'auto',
   },
+  buttonText: {
+    color: '#ffffff',
+    fontSize: 16,
+  },
   nextButtonContainer: {
     marginRight: 10,
     flexDirection: 'row',
     alignItems: 'center',
-    // flex:1,
   },
   nextButtonImage: {
     width: 15,
     height: 10,
-    marginLeft: 1,
-  },
-  nextButton: {
-    paddingRight: 20,
+    marginLeft: 5,
   },
   sliderContainer: {
     flex: 1,
+    justifyContent: 'center',
   },
   sliderContainerInner: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
-    marginTop: 10,
+    justifyContent: 'center',
+    marginTop: 20,
   },
-  sliderItem: {
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    marginHorizontal: 1,
+  indicatorContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
     alignItems: 'center',
   },
-  sliderImage: {
+  indicator: {
     width: 30,
     height: 6,
     borderRadius: 5,
     marginHorizontal: 2,
+  },
+  whiteIndicator: {
+    backgroundColor: '#FFFFFF',
+  },
+  grayIndicator: {
+    backgroundColor: '#CCCCCC',
   },
 });

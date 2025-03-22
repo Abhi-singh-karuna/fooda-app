@@ -90,6 +90,7 @@ const HomeScreen = () => {
       id: '8',
       name: 'Double Burger',
       rating: 4.9,
+      image: require('../../assets/images/burger1.png'),
       distance: '180m',
       price: 17230,
     },
@@ -97,6 +98,7 @@ const HomeScreen = () => {
       id: '9',
       name: 'Double Burger',
       rating: 4.9,
+      image: require('../../assets/images/burger2.png'),
       distance: '180m',
       price: 17230,
     },
@@ -137,6 +139,27 @@ const HomeScreen = () => {
     },
     {
       id: '15',
+      name: 'Double Burger',
+      rating: 4.9,
+      distance: '180m',
+      price: 17230,
+    },
+    {
+      id: '16',
+      name: 'Double Burger',
+      rating: 4.9,
+      distance: '180m',
+      price: 17230,
+    },
+    {
+      id: '17',
+      name: 'Double Burger',
+      rating: 4.9,
+      distance: '180m',
+      price: 17230,
+    },
+    {
+      id: '18',
       name: 'Double Burger',
       rating: 4.9,
       distance: '180m',
@@ -192,7 +215,12 @@ const HomeScreen = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <LinearGradient colors={['#FFFFFF', '#000000']} style={styles.background}>
+      <LinearGradient
+        colors={['#FF8A00', '#000000']}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 0, y: 0.6 }}
+        style={styles.background}
+      >
         <Animated.View
           style={[
             styles.header,
@@ -224,7 +252,12 @@ const HomeScreen = () => {
 
           <View style={styles.headerButtons}>
             <TouchableOpacity style={styles.iconButton}>
-              <Ionicons name="search" size={22} color="#FFF" />
+              <Ionicons
+                name="search"
+                size={22}
+                onPress={() => navigation.navigate('SearchV2Screen')}
+                color="#FFF"
+              />
             </TouchableOpacity>
             <TouchableOpacity
               style={styles.iconButton}
@@ -270,7 +303,7 @@ const HomeScreen = () => {
         showsVerticalScrollIndicator={false}
         onScroll={Animated.event(
           [{ nativeEvent: { contentOffset: { y: scrollY } } }],
-          { useNativeDriver: true },
+          { useNativeDriver: true, listener: () => {} },
         )}
         scrollEventThrottle={16}
         onScrollEndDrag={({ nativeEvent }) => {
@@ -353,11 +386,12 @@ const isCloseToBottom = ({ layoutMeasurement, contentOffset, contentSize }) => {
 
 const styles = StyleSheet.create({
   background: {
-    resizeMode: 'stretch',
+    height: 200,
+    width: '100%',
   },
   container: {
     flex: 1,
-    // marginTop: '10%',
+    backgroundColor: '#F8F8F8',
   },
   loadingContainer: {
     paddingVertical: 20,
@@ -397,8 +431,8 @@ const styles = StyleSheet.create({
     height: 40,
     borderRadius: 20,
     borderWidth: 1,
-    borderColor: 'white',
-    backgroundColor: 'black',
+    borderColor: 'rgba(255, 255, 255, 0.3)',
+    backgroundColor: 'rgba(0, 0, 0, 0.2)',
     justifyContent: 'center',
     alignItems: 'center',
     marginLeft: 10,
@@ -435,10 +469,10 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingHorizontal: 16,
     marginTop: 10,
+    paddingBottom: 80,
   },
   bottomNav: {
     position: 'absolute',
-    marginBottom: 20,
     left: 0,
     right: 0,
     bottom: 0,

@@ -2,11 +2,13 @@ import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import AppNavigator from './navigation/AppNavigator';
 import { AuthProvider } from './context/AuthContext';
+import { AppRegistry } from 'react-native';
+import { name as appName } from './app.json';
 
 // Import Reactotron config if in dev mode
-if (__DEV__) {
-  require('../ReactotronConfig');
-}
+// if (__DEV__) {
+//   require('../ReactotronConfig');
+// }
 
 export default function App() {
   return (
@@ -17,3 +19,5 @@ export default function App() {
     </AuthProvider>
   );
 }
+
+AppRegistry.registerComponent(appName, () => App);

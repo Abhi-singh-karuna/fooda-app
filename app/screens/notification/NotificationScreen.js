@@ -255,7 +255,7 @@ const NotificationScreen = ({ navigation }) => {
   };
 
   const renderNotification = ({ item }) => {
-    if (item.isDeleted) return null;
+    if (!item || item.isDeleted) return null;
 
     return (
       <Swipeable
@@ -279,11 +279,12 @@ const NotificationScreen = ({ navigation }) => {
         }}
       >
         <NotificationCard
+          key={item.id}
           title={item.title}
           description={item.description}
           date={item.date}
-          image={notificationDetails[item.type].image}
-          color={notificationDetails[item.type].color}
+          image={notificationDetails[item.type]?.image}
+          color={notificationDetails[item.type]?.color || '#FFCCCB'}
         />
       </Swipeable>
     );
@@ -314,8 +315,11 @@ const NotificationScreen = ({ navigation }) => {
       <FlatList
         data={sortedNotifications}
         renderItem={renderNotification}
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item) => item.id.toString()}
         contentContainerStyle={{ paddingBottom: 20 }}
+        ListEmptyComponent={() => (
+          <Text style={styles.emptyText}>No notifications</Text>
+        )}
       />
     </View>
   );
@@ -375,6 +379,11 @@ const styles = StyleSheet.create({
     height: '100%',
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  emptyText: {
+    textAlign: 'center',
+    padding: 20,
+    color: '#666',
   },
 });
 
