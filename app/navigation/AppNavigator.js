@@ -9,7 +9,7 @@ import HomeScreen from '../screens/welcome/HomeScreen';
 import FirstScreen from '../screens/welcome/FirstScreen';
 import SecondScreen from '../screens/welcome/SecondScreen';
 import LoginScreen from '../screens/auth/LoginScreen';
-import SignupScreen from '../screens/auth/SignupScreen';
+import SignupScreen from '../screens/auth/signup/SignupScreen';
 import ResetPasswordScreen from '../screens/auth/ResetPasswordScreen';
 import EmailVerificationOTP from '../screens/auth/EmailVerificationOTP';
 import ForgotPasswordScreen from '../screens/auth/ForgotPasswordScreen';
